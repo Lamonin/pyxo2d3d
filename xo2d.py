@@ -35,6 +35,20 @@ class Field:
                         c_y += t_y
                         cell = self.try_get_cell(c_x, c_y)
 
+                    t_x = -t_x
+                    t_y = -t_y
+
+                    c_x = x + t_x
+                    c_y = y + t_y
+
+                    cell = self.try_get_cell(c_x, c_y)
+
+                    while cell is not None and self.field[y][x] == cell:
+                        k += 1
+                        c_x += t_x
+                        c_y += t_y
+                        cell = self.try_get_cell(c_x, c_y)
+
                     if k == 2:
                         return True
         return False

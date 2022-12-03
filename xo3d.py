@@ -40,6 +40,23 @@ class Field:
                             c_z += t_z
                             cell = self.try_get_cell(c_x, c_y, c_z)
 
+                        t_x = -t_x
+                        t_y = -t_y
+                        t_z = -t_z
+
+                        c_x = x + t_x
+                        c_y = y + t_y
+                        c_z = z + t_z
+
+                        cell = self.try_get_cell(c_x, c_y, c_z)
+
+                        while cell is not None and self.field[y][x][z] == cell:
+                            k += 1
+                            c_x += t_x
+                            c_y += t_y
+                            c_z += t_z
+                            cell = self.try_get_cell(c_x, c_y, c_z)
+
                         if k == 2:
                             return True
         return False
