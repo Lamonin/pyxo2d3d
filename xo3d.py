@@ -22,42 +22,18 @@ class Field:
         return True
 
     def check_win_for_cell(self, x, y, z):
+        def get_same_cells_by_offset(x: int, y: int, z: int, o_x: int, o_y: int, o_z: int, c: int):
+            cell = self.try_get_cell(x + o_x, y + o_y, z + o_z)
+            if cell is not None and self.field[y][x][z] == cell:
+                return get_same_cells_by_offset(x + o_x, y + o_y, z + o_z, o_x, o_y, o_z, c + 1)
+            return c
+
         for t_x in range(-1, 2):
             for t_y in range(-1, 2):
                 for t_z in range(-1, 2):
                     if t_x != 0 or t_y != 0 or t_z != 0:
-                        c_x = x + t_x
-                        c_y = y + t_y
-                        c_z = z + t_z
-
-                        cell = self.try_get_cell(c_x, c_y, c_z)
-                        k = 0
-
-                        while cell is not None and self.field[y][x][z] == cell:
-                            k += 1
-                            c_x += t_x
-                            c_y += t_y
-                            c_z += t_z
-                            cell = self.try_get_cell(c_x, c_y, c_z)
-
-                        t_x = -t_x
-                        t_y = -t_y
-                        t_z = -t_z
-
-                        c_x = x + t_x
-                        c_y = y + t_y
-                        c_z = z + t_z
-
-                        cell = self.try_get_cell(c_x, c_y, c_z)
-
-                        while cell is not None and self.field[y][x][z] == cell:
-                            k += 1
-                            c_x += t_x
-                            c_y += t_y
-                            c_z += t_z
-                            cell = self.try_get_cell(c_x, c_y, c_z)
-
-                        if k == 2:
+                        k = get_same_cells_by_offset(x, y, z, t_x, t_y, t_z, 0)
+                        if get_same_cells_by_offset(x, y, z, -t_x, -t_y, -t_z, k) == 2:
                             return True
         return False
 

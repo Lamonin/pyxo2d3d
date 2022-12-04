@@ -20,36 +20,17 @@ class Field:
         return True
 
     def check_win_for_cell(self, x, y):
+        def get_same_cells_by_offset(x: int, y: int, o_x: int, o_y: int, c: int):
+            cell = self.try_get_cell(x + o_x, y + o_y)
+            if cell is not None and self.field[y][x] == cell:
+                return get_same_cells_by_offset(x + o_x, y + o_y, o_x, o_y, c + 1)
+            return c
+
         for t_x in range(-1, 2):
             for t_y in range(-1, 2):
                 if t_x != 0 or t_y != 0:
-                    c_x = x + t_x
-                    c_y = y + t_y
-
-                    cell = self.try_get_cell(c_x, c_y)
-                    k = 0
-
-                    while cell is not None and self.field[y][x] == cell:
-                        k += 1
-                        c_x += t_x
-                        c_y += t_y
-                        cell = self.try_get_cell(c_x, c_y)
-
-                    t_x = -t_x
-                    t_y = -t_y
-
-                    c_x = x + t_x
-                    c_y = y + t_y
-
-                    cell = self.try_get_cell(c_x, c_y)
-
-                    while cell is not None and self.field[y][x] == cell:
-                        k += 1
-                        c_x += t_x
-                        c_y += t_y
-                        cell = self.try_get_cell(c_x, c_y)
-
-                    if k == 2:
+                    k = get_same_cells_by_offset(x, y, t_x, t_y, 0)
+                    if get_same_cells_by_offset(x, y, -t_x, -t_y, k) == 2:
                         return True
         return False
 
